@@ -141,3 +141,24 @@ def test_select_choices():
 
     correct_choice = question.select_choices([4])[0]
     assert correct_choice == 4
+
+@pytest.fixture
+def data():
+    question = Question(title='Q1')  
+    question.add_choice('a', False)
+    question.add_choice('b', False)
+    question.add_choice('c', False)
+    question.add_choice('d', True)
+    question.add_choice('e', False)
+    
+    return question
+
+def test_find_correct_choice(data):
+    correct_choice = data._correct_choice_ids()[0]
+    assert correct_choice == 4
+
+def test_change_correct_choice(data):
+    data.choices[3].is_correct = False
+    data.set_correct_choices([1])
+    correct_choice = data._correct_choice_ids()[0]
+    assert correct_choice == 1
